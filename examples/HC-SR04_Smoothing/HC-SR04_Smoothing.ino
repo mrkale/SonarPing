@@ -16,13 +16,11 @@
 */
 #include "SonarPing.h"
 #include "SmoothSensorData.h"
-#define SKETCH_VERSION "1.0.0"
+#define SKETCH_VERSION "1.1.0"
 
 // Pins for ultrasonic sensor connection
 const byte pinTrigger = 2;
 const byte pinEcho = 3;
-
-word distance;
 
 SonarPing sonar(pinTrigger, pinEcho);
 SmoothSensorData samples = SmoothSensorData();
@@ -37,13 +35,12 @@ void setup()
   // Print header
   Serial.print(F("Median from readings: "));
   Serial.println(samples.getBufferLen());
+  Serial.println("Distance in cm:");
 }
 
 void loop()
 {
-  while (samples.registerData(sonar.distance());  // Readings to buffer
-  distance = samples.getMedian();                 // Smoothed measurement
-  Serial.print(distance);
-  Serial.println(" cm");
+  while (samples.registerData(sonar.getDistance())); // Readings to buffer
+  Serial.println(samples.getMedian());  // Smoothing
   delay(1000);
 }
