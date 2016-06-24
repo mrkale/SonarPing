@@ -1,10 +1,11 @@
 /*
   NAME:
-  Basic usage of SonarPing library
+  Distance measuring statistically smoothed
 
   DESCRIPTION:
-  This sketch demonstrates the use of SonarPing for distance measuring
-  with temperature compensation of the sound speed.
+  This sketch demonstrates the use of ultrasonic distance measurement with
+  smoothing drifts in data by statistical processing with library
+  SmoothSensorData.
 
   LICENSE:
   This program is free software; you can redistribute it and/or modify
@@ -14,13 +15,17 @@
   Author: Libor Gabaj
 */
 #include "SonarPing.h"
+#include "SmoothSensorData.h"
 #define SKETCH_VERSION "1.0.0"
 
 // Pins for ultrasonic sensor connection
 const byte pinTrigger = 2;
 const byte pinEcho = 3;
 
+word distance;
+
 SonarPing sonar(pinTrigger, pinEcho);
+SmoothSensorData samples = SmoothSensorData();
 
 void setup()
 {
@@ -29,13 +34,16 @@ void setup()
   Serial.println(SKETCH_VERSION);
   Serial.print(F("SonarPing v"));
   Serial.println(SONARPING_VERSION);
-  // Set ambient temperature (should be located in loop for real measurement)
-  sonar.setTemperature(25);
+  // Print header
+  Serial.print(F("Median from readings: "));
+  Serial.println(samples.getBufferLen());
 }
 
 void loop()
 {
-  Serial.print(sonar.distance());
+  while (samples.registerData(sonar.distance());  // Readings to buffer
+  distance = samples.getMedian();                 // Smoothed measurement
+  Serial.print(distance);
   Serial.println(" cm");
   delay(1000);
 }
