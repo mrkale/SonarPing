@@ -7,6 +7,7 @@ Library for ultrasonic sensor HC-SR04.
 - Temperature compensation is limited to the range -128 to +127 centigrades, which contains usual working range of the sensors.
 - Temperature compensation of sound speed can be used.
 - Sound speed in meters per second is calculated from the statement
+
   ```soundSpeed (m/s) = 331.3 (m/s) + 0.6 * temperature (degC)```
 
 
@@ -101,6 +102,7 @@ Distance in centimeters
 
 #### See also
 [SonarPing()](#SonarPing)
+
 [setTemperature()](#setTemperature)
 
 [Back to interface](#interface)
@@ -127,6 +129,7 @@ None
 
 #### See also
 [SonarPing()](#SonarPing)
+
 [getDistance()](#getDistance)
 
 [Back to interface](#interface)
