@@ -6,6 +6,7 @@
   Library for ultrasonic sensor HC-SR04.
   - Library is inspired by the Tim Eckel's library NewPing version 1.5
     and 1.6 beta.
+  - Library uses interrupts for measuring sound reflection times.
   - Library uses only SI measurement units. The conversion to imperial units
     should be provided in a sketch code or in a separate library in order
     to avoid code duplicities in sketches using multiple libraries with

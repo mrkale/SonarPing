@@ -1,6 +1,7 @@
 <a id="library"></a>
 # SonarPing
 Library for ultrasonic sensor HC-SR04.
+- Library uses interrupts for measuring sound reflection times.
 - Library uses only SI measurement units. The conversion to imperial units should be provided in a sketch code or in a separate library in order to avoid code duplicities in sketches using multiple libraries with the same conversion functionalities.
 - Due to practical precision of the sensors the distance is always expressed in whole centimeters.
 - Temperature compensation is limited to the range -128 to +127 centigrades, which contains usual working range of the sensors.
