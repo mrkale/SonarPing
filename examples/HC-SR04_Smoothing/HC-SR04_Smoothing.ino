@@ -16,26 +16,24 @@
 */
 #include "SonarPing.h"
 #include "SmoothSensorData.h"
-#define SKETCH_VERSION "1.1.0"
+#define SKETCH "HC-SR04_Smoothing 1.2.0"
 
 // Pins for ultrasonic sensor connection
-const byte pinTrigger = 2;
-const byte pinEcho = 3;
+const byte PIN_TRIGGER = 2;
+const byte PIN_ECHO = 3;
 
-SonarPing sonar(pinTrigger, pinEcho);
+SonarPing sonar(PIN_TRIGGER, PIN_ECHO);
 SmoothSensorData samples = SmoothSensorData();
 
 void setup()
 {
   Serial.begin(9600);
-  Serial.print(F("Sketch v"));
-  Serial.println(SKETCH_VERSION);
-  Serial.print(F("SonarPing v"));
-  Serial.println(SONARPING_VERSION);
+  Serial.println(F(SKETCH));
+  Serial.println(F(SONARPING_VERSION));
   // Print header
   Serial.print(F("Median from readings: "));
   Serial.println(samples.getBufferLen());
-  Serial.println("Distance in cm:");
+  Serial.println(F("Distance in cm:"));
 }
 
 void loop()

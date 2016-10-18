@@ -24,7 +24,7 @@ The implementation has been inspired by the library [NewPing](http://code.google
 
 <a id="constants"></a>
 ## Constants
-- **SONARPING\_VERSION**: Semantic library version
+- **SONARPING\_VERSION**: Name and semantic version of the library
 - **SONARPING_DISTANCE_MIN**: Minimal measuring distance (cm)
 - **SONARPING_DISTANCE_MAX**: Maximal measuring distance (cm)
 - **SONARPING_TEMPERATURE_DEF**: Default ambient temperature (degC)
