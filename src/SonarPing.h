@@ -34,7 +34,7 @@
  */
 #ifndef SONARPING_H
 #define SONARPING_H
-#define SONARPING_VERSION "SonarPing 1.1.1"
+#define SONARPING_VERSION "SonarPing 1.2.0"
 
 #if defined(ARDUINO) && ARDUINO >= 100
   #include <Arduino.h>

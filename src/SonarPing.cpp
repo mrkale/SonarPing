@@ -59,7 +59,7 @@ uint16_t SonarPing::ping_us()
 // Measure distance
 uint16_t SonarPing::getDistance()
 {
-  return ping_us() / soundPace() + 0.5;
+  return ping_us() / soundPace() / 2 + 0.5;
 }
 
 // Store current temperature for further calculations
@@ -71,7 +71,7 @@ void SonarPing::setTemperature(int8_t temperature)
 // Sound pace corrected by temperature
 uint8_t SonarPing::soundPace(void)
 {
-  return (2000000.0 / (33130 + 60 * _temperature));
+  return (1000000.0 / (33130.0 + 60.6 * _temperature));
 }
 
 // Sound travel time
