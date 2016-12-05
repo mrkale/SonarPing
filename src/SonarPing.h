@@ -15,22 +15,24 @@
     expressed in whole centimeters.
   - Temperature compensation is limited to the range -128 to +127 centigrades,
     which contains usual working range of the sensors.
-  - Temperature compensation of sound speed can be used.
+  - Temperature compensation of sound speed can be used. It is limited
+    to the range -128 to +127 centigrades, which contains usual working
+    range of the sensors.
   - Sound speed in meters per second is calculated from the statement
-    soundSpeed (m/s) = 331.3 (m/s) + 0.6 * temperature (degC)
+    soundSpeed (m/s) = 331.3 (m/s) + 0.606 * temperature (degC)
 
   LICENSE:
   This program is free software; you can redistribute it and/or modify
   it under the terms of the license GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
   (related to original code) and MIT License (MIT) for added code.
 
+  CREDENTIALS:
+  Author: Libor Gabaj
+  GitHub: https://github.com/mrkaleArduinoLib/SonarPing.git
+
   CREDITS:
   Tim Eckel - teckel@leethost.com
   http://code.google.com/p/arduino-new-ping/
-
-  CREDENTIALS:
-  Author: Libor Gabaj
-  GitHub: https://github.com/mrkale/SonarPing.git
  */
 #ifndef SONARPING_H
 #define SONARPING_H
