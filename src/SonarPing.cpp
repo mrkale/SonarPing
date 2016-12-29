@@ -38,13 +38,15 @@ uint16_t SonarPing::ping_us()
   // Wait for start of measuring echo pulse
 	deadline =  micros() + SONARPING_DELAY_MAX;  // Deadline for pulse start
 	while (*_echoInput & _echoBit && micros() <= deadline){} // Wait for pin to go LOW
-	while (!(*_echoInput & _echoBit)) {      // Wait for pin to go HIGH - start pulse
+	while (!(*_echoInput & _echoBit)) // Wait for pin to go HIGH - start pulse
+  {
     if (micros() > deadline) return NULL;  // Pulse start failed
   }
   //  Expected maximal pulse stop
   deadline = micros() + pingTime;
   // Wait for end of measuring echo pulse
-  while (*_echoInput & _echoBit) {
+  while (*_echoInput & _echoBit)
+  {
     // Pulse unexpectably long
     if (micros() > deadline) return NULL;
   }

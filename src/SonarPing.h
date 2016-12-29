@@ -55,7 +55,8 @@
 #define SONARPING_DELAY_INTERPING 29     // Minimal delay in milliseconds between pings from specification
 #define SONARPING_DELAY_MAX       18000  // Maximum microseconds for sensor to start the ping (SRF06 is the highest measured, just under 18 ms)
 
-class SonarPing {
+class SonarPing
+{
 public:
 //-------------------------------------------------------------------------
 // Public methods

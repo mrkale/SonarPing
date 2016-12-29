@@ -8,7 +8,7 @@ Library for ultrasonic sensor HC-SR04.
 - Temperature compensation of sound speed can be used.
 - Sound speed in meters per second is calculated from the statement
 
-  ```soundSpeed (m/s) = 331.3 (m/s) + 0.6 * temperature (degC)```
+  ```soundSpeed (m/s) = 331.3 (m/s) + 0.606 * temperature (degC)```
 
 
 <a id="credit"></a>
@@ -31,7 +31,7 @@ The implementation has been inspired by the library [NewPing](http://code.google
 - **SONARPING_DELAY_INTERPING**: Minimal delay in milliseconds between pings from specification
 - **SONARPING_DELAY_MAX**: Maximum microseconds for sensor to start the ping (SRF06 is the highest measured, just under 18 ms)
 
- 
+
 <a id="interface"></a>
 ## Interface
 - [SonarPing()](#SonarPing)
