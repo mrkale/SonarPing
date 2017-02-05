@@ -10,11 +10,11 @@ SonarPing	KEYWORD1
 ###################################
 # Methods and Functions (KEYWORD2)
 ###################################
-getDistance		KEYWORD2
+measureDistance	KEYWORD2
 setTemperature	KEYWORD2
-soundPace		KEYWORD2
-ping_us			KEYWORD2
-distance2time	KEYWORD2
+getTemperature	KEYWORD2
+getDistanceMax	KEYWORD2
+getDistanceMin	KEYWORD2
 
 ###################################
 # Constants (LITERAL1)
@@ -23,5 +23,3 @@ SONARPING_VERSION			LITERAL1
 SONARPING_DISTANCE_MIN		LITERAL1
 SONARPING_DISTANCE_MAX		LITERAL1
 SONARPING_TEMPERATURE_DEF	LITERAL1
-SONARPING_DELAY_INTERPING	LITERAL1
-SONARPING_DELAY_MAX			LITERAL1

@@ -1,76 +1,84 @@
 <a id="library"></a>
 # SonarPing
-Library for ultrasonic sensor HC-SR04.
-- Library uses interrupts for measuring sound reflection times.
-- Library uses only SI measurement units. The conversion to imperial units should be provided in a sketch code or in a separate library in order to avoid code duplicities in sketches using multiple libraries with the same conversion functionalities.
-- Due to practical precision of the sensors the distance is always expressed in whole centimeters.
-- Temperature compensation is limited to the range -128 to +127 centigrades, which contains usual working range of the sensors.
-- Temperature compensation of sound speed can be used.
+Library for ultrasonic sensors with two control pins, preferably HC-SR04.
+- Library uses function *pulseIn()* for measuring sound reflection time periods.
+- Library intentionally uses only SI measurement units. The conversion to imperial units should be provided in a sketch code or in a separate library in order to avoid duplicities in code using multiple libraries with the same conversion functionality.
+- Library does not intentionally use statistical processing of measured values (ping time, distance). There are separate libraries for that purpose to use in order to avoid duplicities in code.
+- Library uses the temperature compensation for air speed. It is limited to the temperature range from -128 to +127 centigrades (degrees of Celsius), which contains usual working range of sensors.
 - Sound speed in meters per second is calculated from the statement
 
   ```soundSpeed (m/s) = 331.3 (m/s) + 0.606 * temperature (degC)```
 
-
-<a id="credit"></a>
-## Credit
-The implementation has been inspired by the library [NewPing](http://code.google.com/p/arduino-new-ping/) from [Tim Eckel](teckel@leethost.com).
+- Default temperature is set to 20 degC.
+- Library measures the distance in whole centimeters in regards to practical accuracy of ultrasonic sensors.
 
 
 <a id="dependency"></a>
 ## Dependency
+
+#### Particle platform
+- **Particle.h**: Includes alternative (C++) data type definitions.
+
+#### Arduino platform
 - **Arduino.h**: Main include file for the Arduino SDK version greater or equal to 100.
-- **avr/io.h**
-- **avr/interrupt.h**
+- **WProgram.h**: Main include file for the Arduino SDK version less than 100.
+- **inttypes.h**: Integer type conversions. This header file includes the exact-width integer definitions and extends them with additional facilities provided by the implementation.
+
 
 <a id="constants"></a>
 ## Constants
 - **SONARPING\_VERSION**: Name and semantic version of the library
-- **SONARPING_DISTANCE_MIN**: Minimal measuring distance (cm)
-- **SONARPING_DISTANCE_MAX**: Maximal measuring distance (cm)
-- **SONARPING_TEMPERATURE_DEF**: Default ambient temperature (degC)
-- **SONARPING_DELAY_INTERPING**: Minimal delay in milliseconds between pings from specification
-- **SONARPING_DELAY_MAX**: Maximum microseconds for sensor to start the ping (SRF06 is the highest measured, just under 18 ms)
+- **SONARPING\_NAN**: Represents undefined ping time or distance
+- **SONARPING\_DISTANCE\_MIN**: Minimal measuring distance (cm)
+- **SONARPING\_DISTANCE\_MAX**: Maximal measuring distance (cm)
+- **SONARPING\_TEMPERATURE\_DEF**: Default ambient temperature (degC)
 
+Remaining constants are listed in the library include file. They are used mostly internally.
 
+ 
 <a id="interface"></a>
 ## Interface
 - [SonarPing()](#SonarPing)
-- [getDistance()](#getDistance)
+- [measureDistance()](#measureDistance)
+
+#### Setters
 - [setTemperature()](#setTemperature)
+
+#### Getters
+- [getTemperature()](#getTemperature)
+- [getDistanceMin()](#getDistanceRange)
+- [getDistanceMax()](#getDistanceRange)
 
 
 <a id="SonarPing"></a>
 ## SonarPing()
 #### Description
-Overloaded constructor sets configuration parameters for library and measurement. They all are stored in the private variables of an library instance object.
+Constructor sets configuration parameters for library and measurement. They all are stored in the private variables of a library instance object.
 - Maximal and minimal distance determines the expected range of measurement. Results outside this range are considered as erroneous ones and are ignored.
-- Measurement range is limited by hardcoded limits 2 to 500 cm. Limits outside this range is defaulted to its bounderies.
-- Overloaded constructor uses just one pin.
+- Measurement range is limited by limits 2 to 500 cm due to hardware limitation. Limits outside this range are defaulted to those bounderies.
 
 #### Syntax
     SonarPing(uint8_t trigger_pin, uint8_t echo_pin, uint16_t distance_max, uint16_t distance_min);
-    SonarPing(uint8_t trigger_pin, uint16_t distance_max, uint16_t distance_min);
 
 #### Parameters
-<a id="trigger_pin"></a>
+<a id="prm_trigger_pin"></a>
 - **trigger_pin**: Digital pin number for sensor's trigger pin.
 
 
-<a id="echo_pin"></a>
+<a id="prm_echo_pin"></a>
 - **echo_pin**: Digital pin number for sensor's echo pin.
-  - It is ignored in one-pin modus.
 
 
-<a id="distance_max"></a>
+<a id="prm_distance_max"></a>
 - **distance_max**: Maximal accepted measured distance from the sensor to a reflector in centimeters.
-  - *Valid values*: positive integer in the range [distance_min](#distance_min) to 500
-  - *Default value*: 400
+  - *Valid values*: non-negative integer in the range 2 to 500 cm ([SONARPING\_DISTANCE\_MIN](#constants) ~ [SONARPING\_DISTANCE\_MAX](#constants)).
+  - *Default value*: 500 cm ([SONARPING\_DISTANCE\_MAX](#constants)).
 
 
-<a id="distance_min"></a>
+<a id="prm_distance_min"></a>
 - **distance_min**: Minimal accepted measured distance from the sensor to a reflector in centimeters.
-  - *Valid values*: positive integer in the range 2 to 500
-  - *Default value*: 2
+  - *Valid values*: non-negative integer in the range 2 to 500 cm ([SONARPING\_DISTANCE\_MIN](#constants) ~ [SONARPING\_DISTANCE\_MAX](#constants)).
+  - *Default value*: 2 cm ([SONARPING\_DISTANCE\_MIN](#constants)).
 
 #### Returns
 Object perfoming the ultrasonic measurement.
@@ -78,31 +86,35 @@ Object perfoming the ultrasonic measurement.
 #### Example
 
 ``` cpp
-sonar = SonarPing(2, 3);          // Default measurement range
-sonar = SonarPing(2, 3, 100);     // Measured limited distance, e.g., a water barrel
-sonar = SonarPing(2, 3, 100, 50); // Measured limited range, e.g., a water level
+SonarPing sonar(2, 3);          // Default measurement range
+SonarPing sonar(2, 3, 100);     // Only specific maximal measured distance, e.g., a water barrel
+SonarPing sonar(2, 3, 100, 50); // Specific valid range, e.g., a water level
+SonarPing sonar(2, 3, SONARPING_DISTANCE_MAX, 10); // Only specific minimal measured distance
 ```
+
+#### See also
+[getDistanceMax()](#getDistanceRange)
+
+[getDistanceMin()](#getDistanceRange)
 
 [Back to interface](#interface)
 
 
-<a id="getDistance"></a>
-## getDistance()
+<a id="measureDistance"></a>
+## measureDistance()
 #### Description
 The method measures distance from the sensor to a reflector based on measuring sound wave time to it and back. Method corrects the measurement by temperature stored in instance object before measurement.
 
 #### Syntax
-    void getDistance();
+    void measureDistance();
 
 #### Parameters
 None
 
 #### Returns
-Distance in centimeters
+Distance in centimeters.
 
 #### See also
-[SonarPing()](#SonarPing)
-
 [setTemperature()](#setTemperature)
 
 [Back to interface](#interface)
@@ -112,7 +124,7 @@ Distance in centimeters
 ## setTemperature()
 #### Description
 The method stores the ambient air temperature to the instance object.
-  - Default temperature is set to 20 degC at object initialization.
+  - Default temperature is set to 20 degC in [constructor](#SonarPing).
   - It is not needed to set temperature before every measurement, just then the temperature has changed significantly.
 
 #### Syntax
@@ -120,16 +132,55 @@ The method stores the ambient air temperature to the instance object.
 
 #### Parameters
 <a id="temperature"></a>
-- **temperature**: Ambient air temperature in centigrades.
-  - *Valid values*: integer in the range -128 to +127
-  - *Default value*: 20
+- **temperature**: Ambient air temperature in whole centigrades.
+  - *Valid values*: integer in the range -128 to +127.
+  - *Default value*: 20 degC ([SONARPING\_TEMPERATURE\_DEF](#constants)).
 
 #### Returns
 None
 
 #### See also
+[getTemperature()](#getTemperature)
+
+[Back to interface](#interface)
+
+
+<a id="getDistanceRange"></a>
+## getDistanceMax(), getDistanceMin()
+#### Description
+The methods return currently minimal or maximal valid distance for correct measurement set by the [constructor](#SonarPing).
+
+#### Syntax
+    uint16_t getDistanceMax();
+    uint16_t getDistanceMin();
+
+#### Parameters
+None
+
+#### Returns
+Actual minimal and maximal value of the valid distance range.
+
+#### See also
 [SonarPing()](#SonarPing)
 
-[getDistance()](#getDistance)
+[Back to interface](#interface)
+
+
+<a id="getTemperature"></a>
+## getTemperature()
+#### Description
+The method returns currently set temperature in centigrades for correction.
+
+#### Syntax
+    int8_t getTemperature();
+
+#### Parameters
+None
+
+#### Returns
+Temperature in whole centigrades.
+
+#### See also
+[setTemperature()](#setTemperature)
 
 [Back to interface](#interface)
